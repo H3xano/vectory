@@ -12,7 +12,14 @@ module Vectory
 
     def self.from_vector(vector)
       mimetype = vector.class.mimetype
-      content = vector.content.gsub("\r\n", "\n")
+      content = vector.content
+
+      # Normalize line endings for text-based types before encoding
+      # Apply to PS, EPS, and SVG. EMF is binary, so skip it.
+      if ["application/postscript", "image/svg+xml"].include?(vector.mime)
+        content = content.gsub("\r\n", "\n")
+      end
+
       data = Base64.strict_encode64(content)
 
       new("data:#{mimetype};base64,#{data}")
