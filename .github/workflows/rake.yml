@@ -10,6 +10,6 @@ on:
 
 jobs:
   rake:
-    uses: h3xano/ci/.github/workflows/inkscape-rake.yml@main
+    uses: h3xano/ci/.github/workflows/inkscape-rake.yml@relax-inkscape-versions
     secrets:
       pat_token: ${{ secrets.METANORMA_CI_PAT_TOKEN }}
