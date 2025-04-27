@@ -20,9 +20,9 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           # --- Change this line ---
-          ruby-version: '3.4' # Try Ruby 3.4.x
+          ruby-version: '2.7' # Use Ruby 2.7.x
           # --- End of change ---
-          bundler: 'latest'
+          bundler: 'latest' # Use a recent bundler
           bundler-cache: false
 
       - name: Install MSYS2 development toolchain
