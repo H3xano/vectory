@@ -20,7 +20,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           # --- Change this line ---
-          ruby-version: '3.0' # Downgrade to Ruby 3.0.x
+          ruby-version: '3.4' # Try Ruby 3.4.x
           # --- End of change ---
           bundler: 'latest'
           bundler-cache: false
@@ -28,22 +28,13 @@ jobs:
       - name: Install MSYS2 development toolchain
         if: runner.os == 'Windows'
         run: ridk install 3
-        # Keep this step, it might still be needed for other gems
+        # Keep this step
 
       - name: Install Bundler dependencies
         run: bundle install --verbose
 
-      # --- Dependencies (keep commented for now) ---
-      # - name: Cache Chocolatey packages
-      #   if: runner.os == 'Windows'
-      #   uses: metanorma/ci/choco-cache-action@main
-      #
-      # - name: Setup Inkscape (Using Fork)
-      #   uses: <your-github-username>/ci/inkscape-setup-action@feat/update-inkscape-windows
-      #
-      # - name: Setup Ghostscript
-      #   uses: metanorma/ci/ghostscript-setup-action@main
+      # --- Dependencies (Keep commented) ---
+      # ...
 
-      # --- Tests (keep commented for now) ---
-      # - name: Run Rake tests
-      #   run: bundle exec rake
+      # --- Tests (Keep commented) ---
+      # ...
