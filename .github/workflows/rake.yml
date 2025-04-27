@@ -16,25 +16,32 @@ jobs:
         with:
           submodules: true
 
-      - name: Set up Ruby
+      - name: Set up Ruby # Revert to Ruby 3.1 and use bundler-cache
         uses: ruby/setup-ruby@v1
         with:
-          # --- Change this line ---
-          ruby-version: '2.7' # Use Ruby 2.7.x
-          # --- End of change ---
-          bundler: 'latest' # Use a recent bundler
-          bundler-cache: false
+          ruby-version: '3.1' # Use a version from the main matrix
+          bundler-cache: true # Mimic main repo, implicitly runs install using Gemfile.lock
 
-      - name: Install MSYS2 development toolchain
+      # REMOVE these steps for now:
+      # - name: Install MSYS2 development toolchain
+      #   if: runner.os == 'Windows'
+      #   run: ridk install 3
+      #
+      # - name: Install Bundler dependencies
+      #   run: bundle install --verbose
+
+      # --- Dependencies (Uncomment these now!) ---
+      - name: Cache Chocolatey packages
         if: runner.os == 'Windows'
-        run: ridk install 3
-        # Keep this step
+        uses: metanorma/ci/choco-cache-action@main
 
-      - name: Install Bundler dependencies
-        run: bundle install --verbose
+      - name: Setup Inkscape (Using Fork) # <<< YOUR MODIFIED ACTION
+        uses: <your-github-username>/ci/inkscape-setup-action@feat/update-inkscape-windows
+        # Replace <your-github-username>
 
-      # --- Dependencies (Keep commented) ---
-      # ...
+      - name: Setup Ghostscript
+        uses: metanorma/ci/ghostscript-setup-action@main
 
-      # --- Tests (Keep commented) ---
-      # ...
+      # --- Tests (Uncomment this now!) ---
+      - name: Run Rake tests
+        run: bundle exec rake
