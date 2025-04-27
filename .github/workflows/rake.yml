@@ -1,46 +1,45 @@
-name: rake-windows-inkscape-test # New temporary name
+name: rake-windows-inkscape-test
 
-on: # Keep original triggers, or simplify if needed
+on:
   push:
     branches:
-      # Trigger specifically on your test branch for now
       - test/update-inkscape-action
-  pull_request: # Can keep this if you want PRs to your fork to trigger it
+  pull_request:
 
 jobs:
-  rake-windows-test: # Simplified job name
+  rake-windows-test:
     name: Test Vectory on Windows with Custom Inkscape
-    runs-on: windows-latest # Force Windows runner
+    runs-on: windows-latest
 
     steps:
-      # --- Basic Checkout and Ruby Setup ---
       - uses: actions/checkout@v4
         with:
-          submodules: true # Keep this if vectory uses submodules
+          submodules: true
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          # Choose a representative Ruby version used by Metanorma
-          # (Check metanorma docs or other workflows if unsure, e.g., 3.1, 3.2)
           ruby-version: '3.1'
-          bundler-cache: true # Cache gems for speed
+          # Use latest bundler, don't rely on cache for install
+          bundler: 'latest'
+          bundler-cache: false # Disable implicit bundle install
+
+      - name: Install Bundler dependencies # Explicit install step
+        run: bundle install --verbose # Add verbose for more logs if it fails
 
       # --- Setup Dependencies (Inkscape and Ghostscript) ---
-      - name: Cache Chocolatey packages # Keep this step from original reusable workflow
-        if: runner.os == 'Windows' # Condition is always true here, but keep for clarity
-        uses: metanorma/ci/choco-cache-action@main
-
-      - name: Setup Inkscape (Using Fork) # <<< YOUR MODIFIED ACTION
-        uses: H3xano/ci/inkscape-setup-action@feat/update-inkscape-windows
-        # Replace <your-github-username> with your actual username!
-
-      - name: Setup Ghostscript # Keep this, vectory needs it
-        uses: metanorma/ci/ghostscript-setup-action@main
+      # Keep these commented out for now to isolate the bundler issue
+      # - name: Cache Chocolatey packages
+      #   if: runner.os == 'Windows'
+      #   uses: metanorma/ci/choco-cache-action@main
+      #
+      # - name: Setup Inkscape (Using Fork)
+      #   uses: <your-github-username>/ci/inkscape-setup-action@feat/update-inkscape-windows
+      #
+      # - name: Setup Ghostscript
+      #   uses: metanorma/ci/ghostscript-setup-action@main
 
       # --- Run the Tests ---
-      - name: Run Rake tests
-        run: bundle exec rake
-        # Add any necessary environment variables if needed
-        # env:
-        #   CI: true
+      # Keep this commented out for now
+      # - name: Run Rake tests
+      #   run: bundle exec rake
