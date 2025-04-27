@@ -36,7 +36,7 @@ jobs:
         uses: metanorma/ci/choco-cache-action@main
 
       - name: Setup Inkscape (Using Fork) # <<< YOUR MODIFIED ACTION
-        uses: <your-github-username>/ci/inkscape-setup-action@feat/update-inkscape-windows
+        uses: H3xano/ci/inkscape-setup-action@feat/update-inkscape-windows
         # Replace <your-github-username>
 
       - name: Setup Ghostscript
