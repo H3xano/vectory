@@ -20,15 +20,20 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
-          # Use latest bundler, don't rely on cache for install
           bundler: 'latest'
-          bundler-cache: false # Disable implicit bundle install
+          bundler-cache: false # Keep false
 
-      - name: Install Bundler dependencies # Explicit install step
-        run: bundle install --verbose # Add verbose for more logs if it fails
+      # --- Add this step ---
+      - name: Install MSYS2 development toolchain # Explicitly install build tools
+        if: runner.os == 'Windows'
+        run: ridk install 3
+        # '3' selects the "MSYS2 and MINGW development toolchain" option
+      # --- End of added step ---
 
-      # --- Setup Dependencies (Inkscape and Ghostscript) ---
-      # Keep these commented out for now to isolate the bundler issue
+      - name: Install Bundler dependencies
+        run: bundle install --verbose # Keep verbose
+
+      # --- Dependencies (keep commented) ---
       # - name: Cache Chocolatey packages
       #   if: runner.os == 'Windows'
       #   uses: metanorma/ci/choco-cache-action@main
@@ -39,7 +44,6 @@ jobs:
       # - name: Setup Ghostscript
       #   uses: metanorma/ci/ghostscript-setup-action@main
 
-      # --- Run the Tests ---
-      # Keep this commented out for now
+      # --- Tests (keep commented) ---
       # - name: Run Rake tests
       #   run: bundle exec rake
