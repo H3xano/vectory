@@ -19,21 +19,21 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'
+          # --- Change this line ---
+          ruby-version: '3.0' # Downgrade to Ruby 3.0.x
+          # --- End of change ---
           bundler: 'latest'
-          bundler-cache: false # Keep false
+          bundler-cache: false
 
-      # --- Add this step ---
-      - name: Install MSYS2 development toolchain # Explicitly install build tools
+      - name: Install MSYS2 development toolchain
         if: runner.os == 'Windows'
         run: ridk install 3
-        # '3' selects the "MSYS2 and MINGW development toolchain" option
-      # --- End of added step ---
+        # Keep this step, it might still be needed for other gems
 
       - name: Install Bundler dependencies
-        run: bundle install --verbose # Keep verbose
+        run: bundle install --verbose
 
-      # --- Dependencies (keep commented) ---
+      # --- Dependencies (keep commented for now) ---
       # - name: Cache Chocolatey packages
       #   if: runner.os == 'Windows'
       #   uses: metanorma/ci/choco-cache-action@main
@@ -44,6 +44,6 @@ jobs:
       # - name: Setup Ghostscript
       #   uses: metanorma/ci/ghostscript-setup-action@main
 
-      # --- Tests (keep commented) ---
+      # --- Tests (keep commented for now) ---
       # - name: Run Rake tests
       #   run: bundle exec rake
